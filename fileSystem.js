@@ -1,9 +1,16 @@
 'use strict';
-
 const async = require('async');
 const fs = require('fs');
 const osenv = require('osenv');
 const path = require('path');
+
+let shell;
+
+if (process.versions.electron) {
+  shell = require('electron').shell;
+} else {
+  shell = window.require('nw.gui').Shell;
+}
 
 function getUsersHomeFolder() {
   return osenv.home() + '/OneDrive';
@@ -14,11 +21,11 @@ function getFilesInFolder(folderPath, cb) {
 }
 
 function inspectAndDescribeFile(filePath, cb) {
-  let result = {file: path.basename(filePath), path: filePath, type: ''};
+  let result = { file: path.basename(filePath), path: filePath, type: '' };
   fs.stat(filePath, (err, stat) => {
     if (err) {
       cb(err);
-    } else {
+    }       else {
       if (stat.isFile()) {
         result.type = 'file';
       }
@@ -37,8 +44,13 @@ function inspectAndDescribeFiles(folderPath, files, cb) {
   }, cb);
 }
 
+function openFile(filePath) {
+  shell.openItem(filePath);
+}
+
 module.exports = {
   getUsersHomeFolder,
   getFilesInFolder,
-  inspectAndDescribeFiles
+  inspectAndDescribeFiles,
+  openFile
 };

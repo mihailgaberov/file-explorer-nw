@@ -1,2 +1,2 @@
 # File Explorer with NW.js
-Learning by Doing: ross-Platform Desktop Applications
+Learning by doing: ross-Platform Desktop Applications
